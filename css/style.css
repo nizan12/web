@@ -1,8 +1,11 @@
+/* ================= ROOT VARIABLE ================= */
 :root {
-    --primary: #00d462;
+    --primary: #00b050;
     --bg: #010101;
+    --wt: #ffffff;
 }
 
+/* ================= GLOBAL RESET ================= */
 * {
     margin: 0;
     padding: 0;
@@ -15,19 +18,20 @@
 body {
     font-family: 'Poppins', sans-serif;
     color: #fff;
+    background-color: #faf8f5;
 }
 
-/* Navbar */
+/* ================= NAVBAR ================= */
 .navbar {
     background-color: rgba(1, 1, 1, 0.5);
-    /* border-bottom: 1.3px solid var(--primary); */
-    position: fixed;
     border-bottom: 2px solid rgba(1, 1, 1, 0.2);
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 9999;
     padding: 0.8rem 7%;
+    backdrop-filter: blur(8px);
 }
 
 .navbar .navbar-logo {
@@ -43,26 +47,8 @@ body {
 }
 
 .navbar .nav-link {
-    color: #fff !important;
-    font-size: 1.1rem;
-    margin: 0 0.5rem;
-    margin-top: 0.3rem;
     position: relative;
-}
-
-.nav-link2:hover {
-    border-color: rgba(48, 226, 90, 0.8);
-    /* Lebih gelap saat hover */
-    background-color: rgba(40, 167, 70, 0.283);
-    /* Latar transparan */
-    color: #31e85c;
-    /* Teks lebih gelap */
-}
-
-
-.navbar .nav-link {
-    position: relative;
-    display: inline-block; /* penting agar underline sesuai panjang teks */
+    display: inline-block;
     color: #fff !important;
     font-size: 1.1rem;
     margin: 0 0.5rem;
@@ -70,14 +56,13 @@ body {
     transition: color 0.3s ease;
 }
 
-/* Garis bawah animasi */
 .navbar .nav-link::after {
     content: '';
     display: block;
-    padding-bottom: 0.3 rem;
+    padding-bottom: 0.3rem;
     border-bottom: 0.15rem solid rgba(40, 167, 70, 0.589);
     transform: scaleX(0);
-    transition: transform 0.1s ease;
+    transition: transform 0.25s ease;
 }
 
 .navbar .nav-link:hover::after {
@@ -98,27 +83,13 @@ body {
     color: var(--primary);
 }
 
-
-
-/* Hover nav-link1 */
-.nav-link1:hover {
-    border-color: #dddddd;
-    /* Border putih lebih gelap saat hover */
-    background-color: rgba(255, 255, 255, 0.1);
-    /* Opsional: latar sedikit terang */
-    color: #ffffff;
-}
-
-/* Masuk */
+/* Tombol Masuk */
 .nav-link1 {
     border: 1.5px solid rgba(255, 255, 255, 0.5);
-    /* Putih transparan 50% */
     border-radius: 0.5rem;
-    /* Sudut membulat */
     padding: 7px 15px;
     text-decoration: none;
     color: #ffffff;
-    /* Teks putih */
     background-color: transparent;
     transition: all 0.3s ease;
     display: flex;
@@ -128,22 +99,16 @@ body {
 
 .nav-link1:hover {
     border-color: rgba(255, 255, 255, 0.8);
-    /* Agak lebih gelap saat hover */
     background-color: rgba(255, 255, 255, 0.274);
-    /* Latar sedikit terang */
-    color: #ffffff;
 }
 
-/* Daftar */
+/* Tombol Daftar */
 .nav-link2 {
     border: 1.5px solid rgba(40, 167, 69, 0.5);
-    /* Hijau transparan */
     border-radius: 0.5rem;
-    /* Sudut membulat */
     padding: 7px 15px;
     text-decoration: none;
     color: var(--primary);
-    /* Teks hijau */
     background-color: transparent;
     transition: all 0.3s ease;
     display: flex;
@@ -151,30 +116,11 @@ body {
     margin-top: 0.4rem;
 }
 
-
-@media (max-width: 991px) {
-    .navbar {
-        padding: 1rem 5%;
-        background-color: rgba(0, 0, 0, 0.938);
-        transition: background-color 0.3s ease;
-    }
-
-    .navbar a {
-        display: inline-block;
-        width: auto; /* penting biar garis sesuai teks */
-    }
-
-
-/* font hubungi kami */
-#hubungi-kami h2 {
-    color: black;
+.nav-link2:hover {
+    border-color: rgba(48, 226, 90, 0.8);
+    background-color: rgba(40, 167, 70, 0.283);
+    color: #31e85c;
 }
-
-#footer p {
-    color: #fff;
-}}
-
-
 
 /* ================= HERO SECTION ================= */
 .hero-section {
@@ -192,7 +138,6 @@ body {
     overflow: hidden;
 }
 
-/* Overlay hitam transparan di atas gambar */
 .hero-section .overlay {
     position: absolute;
     top: 0;
@@ -203,15 +148,6 @@ body {
     z-index: 1;
 }
 
-.hero-section h1 span {
-    color: var(--primary);
-}
-
-.hero-section p span {
-    color: var(--primary);
-}
-
-/* Konten teks hero */
 .hero-content {
     position: relative;
     z-index: 2;
@@ -228,6 +164,7 @@ body {
     background: #fff;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 10px rgba(0, 212, 98, 0.3);
 }
 
 .hero-content h1 span {
@@ -241,22 +178,319 @@ body {
     margin-bottom: 2rem;
 }
 
-
-.navbar {
-    z-index: 1030;
-    /* default Bootstrap */
+/* ================= DASHBOARD SIDEBAR ================= */
+.sidebar {
+    background: #fff;
+    min-height: 100vh;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 1.5rem 1rem;
+    border-right: 1px solid #eee;
+    color: #333;
+    z-index: 9900;
+    transition: all 0.3s ease;
 }
 
-.modal {
-    z-index: 2000;
-    /* pastikan di atas navbar */
+.sidebar .nav-link {
+    color: #555;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.sidebar .nav-link.active,
+.sidebar .nav-link:hover {
+    background-color: var(--primary);
+    color: #fff;
+}
+
+.logout-btn {
+    border: 1px solid #f8d7da;
+    color: #fff;
+    background-color: #d73c4b;
+    width: 100%;
+    border-radius: 0.5rem;
+    transition: background-color 0.5s;
+
+}
+.logout-btn:hover {
+    background-color: #ca2432;
+    color: #ffff;
+    border: 1px solid #f8d7da;
+}
+
+.main-content {
+    margin-left: 260px;
+    padding: 1.5rem;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+/* ================= CARD & TABLE STYLE ================= */
+.highlight-card {
+    background-color: #fff;
+    border-radius: 1rem;
+    border: 1px solid var(--primary);
+    padding: 1rem;
+    box-shadow: 8px 8px 0px 0px var(--primary);
+    transition: 0.2s;
+}
+
+.highlight-card:hover {
+    box-shadow: 14px 14px 0px 0px var(--primary);
+}
+
+.highlight-card h6 {
+    font-weight: 600;
+}
+
+.highlight-card p {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.table-wrapper {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin-top: 1rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.btn-view {
+    color: #0d6efd;
+}
+
+.btn-edit {
+    color: #198754;
+}
+
+.btn-delete {
+    color: #dc3545;
+}
+
+.search-table {
+    width: 250px;
+}
+
+/* Style tambahan khusus halaman tambah notulen */
+.form-section {
+    background-color: #fffaf6;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
+
+.form-control,
+.form-select {
+    background-color: #fff;
+    border-color: #ddd;
+}
+
+.form-control:focus {
+    border-color: #00b050;
+    box-shadow: 0 0 5px rgba(0, 176, 80, 0.4);
+}
+
+.btn-save {
+    background-color: #00b050;
+    color: white;
+    font-weight: 600;
+    border-radius: .5rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-save:hover {
+    background-color: #02913f;
+}
+.alert {
+    display: none;
 }
 
 
-#hero,
-#fitur-unggulan,
-#tim,
-#hubungi-kami {
-    scroll-margin-top: 80px;
-    /* atau 70px kalau navbarnya lebih kecil */
+.table-wrapper {
+            background-color: #fff;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .badge-role {
+            background-color: #6c757d;
+            color: white;
+            font-size: 0.8rem;
+            border-radius: 0.5rem;
+            padding: 0.3rem 0.7rem;
+        }
+
+        .btn-delete {
+            background-color: #ffe6e6;
+            color: #dc3545;
+            border: none;
+            border-radius: 0.4rem;
+            transition: 0.2s;
+        }
+
+        .btn-delete:hover {
+            background-color: #ffcccc;
+        }
+
+        .table td,
+        .table th {
+            vertical-align: middle;
+        }
+
+        .user-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .profile-box {
+            background-color: #fff;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-edit {
+            background-color: #00b050;
+            color: white;
+            border: none;
+            border-radius: .5rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .btn-edit:hover {
+            background-color: #02913f;
+        }
+
+/* Header bar */
+.header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Kiri: tombol + search */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+/* Search agar lebar penuh */
+.header-left input {
+    flex-grow: 1;
+}
+
+/* ================= Sidebar Responsive ================= */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    min-height: 100vh;
+    background-color: #fff;
+    border-right: 1px solid #eee;
+    padding: 1.5rem 1rem;
+    transition: left 0.3s ease-in-out;
+    z-index: 1050;
+}
+
+/* Sembunyikan tombol toggle di layar besar */
+#toggleSidebar {
+    display: none;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: none;
+    z-index: 1040;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+
+@media (max-width: 992px) {
+    .sidebar {
+        left: -260px;
+    }
+
+    #toggleSidebar {
+        display: inline-block;
+        background-color: #00b050;
+        padding: 4px 10px;
+        color: #fff;
+        border-radius: 5px;
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+    }
+
+    .header-bar {
+        position: sticky;
+        top: 0;
+        background: #fffaf6;
+        z-index: 1030;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .sidebar-toggle {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+    }
+}
+
+
+
+
+/* ================= HERO RESPONSIVE ================= */
+@media (max-width: 576px) {
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
