@@ -260,7 +260,7 @@ body {
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
 }
 .btn-view {
-    background-color: #4690ff;
+    background-color: #78aefe;
     color: #0d6efd;
     border: none;
     border-radius: 0.4rem;
@@ -268,7 +268,7 @@ body {
 }
 
 .btn-view:hover {
-    background-color: #4690ff;
+    background-color: #2a7fff;
 }
 
 .search-table {
