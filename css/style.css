@@ -163,9 +163,6 @@ body {
     color: #fff;
 }
 
-#footer p span {
-    color: var(--primary);
-}
 
 
 /* ================= HERO SECTION ================= */
@@ -193,6 +190,10 @@ body {
     height: 100%;
     background: rgba(0, 0, 0, 0.55);
     z-index: 1;
+}
+
+.hero-section p span {
+    color: var(--primary);
 }
 
 /* Konten teks hero */
