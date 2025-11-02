@@ -318,7 +318,12 @@ body {
     border-radius: 1rem;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
 }
-
+.form-section-add-user{
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+}
 .form-control,
 .form-select {
     background-color: #fff;
