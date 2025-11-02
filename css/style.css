@@ -51,9 +51,12 @@ body {
 }
 
 .nav-link2:hover {
-    border-color: rgba(48, 226, 90, 0.8); /* Lebih gelap saat hover */
-    background-color: rgba(40, 167, 70, 0.283); /* Latar transparan */
-    color: #31e85c; /* Teks lebih gelap */
+    border-color: rgba(48, 226, 90, 0.8);
+    /* Lebih gelap saat hover */
+    background-color: rgba(40, 167, 70, 0.283);
+    /* Latar transparan */
+    color: #31e85c;
+    /* Teks lebih gelap */
 }
 
 
@@ -89,18 +92,23 @@ body {
 
 /* Hover nav-link1 */
 .nav-link1:hover {
-    border-color: #dddddd; /* Border putih lebih gelap saat hover */
-    background-color: rgba(255, 255, 255, 0.1); /* Opsional: latar sedikit terang */
+    border-color: #dddddd;
+    /* Border putih lebih gelap saat hover */
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Opsional: latar sedikit terang */
     color: #ffffff;
 }
 
 /* Masuk */
 .nav-link1 {
-    border: 1.5px solid rgba(255, 255, 255, 0.5); /* Putih transparan 50% */
-    border-radius: 0.5rem; /* Sudut membulat */
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    /* Putih transparan 50% */
+    border-radius: 0.5rem;
+    /* Sudut membulat */
     padding: 7px 15px;
     text-decoration: none;
-    color: #ffffff; /* Teks putih */
+    color: #ffffff;
+    /* Teks putih */
     background-color: transparent;
     transition: all 0.3s ease;
     display: flex;
@@ -109,18 +117,23 @@ body {
 }
 
 .nav-link1:hover {
-    border-color: rgba(255, 255, 255, 0.8); /* Agak lebih gelap saat hover */
-    background-color: rgba(255, 255, 255, 0.274); /* Latar sedikit terang */
+    border-color: rgba(255, 255, 255, 0.8);
+    /* Agak lebih gelap saat hover */
+    background-color: rgba(255, 255, 255, 0.274);
+    /* Latar sedikit terang */
     color: #ffffff;
 }
 
 /* Daftar */
 .nav-link2 {
-    border: 1.5px solid rgba(40, 167, 69, 0.5); /* Hijau transparan */
-    border-radius: 0.5rem; /* Sudut membulat */
+    border: 1.5px solid rgba(40, 167, 69, 0.5);
+    /* Hijau transparan */
+    border-radius: 0.5rem;
+    /* Sudut membulat */
     padding: 7px 15px;
     text-decoration: none;
-    color: var(--primary); /* Teks hijau */
+    color: var(--primary);
+    /* Teks hijau */
     background-color: transparent;
     transition: all 0.3s ease;
     display: flex;
@@ -211,11 +224,13 @@ body {
 
 
 .navbar {
-  z-index: 1030; /* default Bootstrap */
+    z-index: 1030;
+    /* default Bootstrap */
 }
 
 .modal {
-  z-index: 2000; /* pastikan di atas navbar */
+    z-index: 2000;
+    /* pastikan di atas navbar */
 }
 
 
@@ -223,7 +238,9 @@ body {
 #fitur-unggulan,
 #tim,
 #hubungi-kami {
-  scroll-margin-top: 80px; /* atau 70px kalau navbarnya lebih kecil */
+    scroll-margin-top: 80px;
+    /* atau 70px kalau navbarnya lebih kecil */
 }
 
 
+tes
