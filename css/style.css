@@ -259,7 +259,7 @@ body {
     margin-top: 1rem;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
 }
-.btn-delete {
+.btn-view {
     background-color: #4690ff;
     color: #0d6efd;
     border: none;
@@ -267,7 +267,7 @@ body {
     transition: 0.2s;
 }
 
-.btn-delete:hover {
+.btn-view:hover {
     background-color: #4690ff;
 }
 
