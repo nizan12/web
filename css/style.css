@@ -247,6 +247,18 @@ body.no-scroll {
     color: #fff;
 }
 
+/* Batasi tinggi konten biar nggak nabrak tombol logout */
+.sidebar .menu-container {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* Tambahkan sedikit padding di bawah agar tombol logout nggak terlalu mepet */
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid #ddd;
+}
+
 .logout-btn {
     border: 1px solid #f8d7da;
     color: #fff;
