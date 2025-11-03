@@ -423,6 +423,8 @@ body {
 .header-bar {
     display: flex;
     align-items: center;
+    margin-left: -12px;
+    margin-right: -12px;
     justify-content: space-between;
     gap: 1rem;
     margin-bottom: 1rem;
