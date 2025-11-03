@@ -17,10 +17,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (adminNameEl) adminNameEl.textContent = `Halo, ${adminData.name} 👋`;
 
     // ==========================================================
-    // 2️⃣ DATA NOTULEN (localStorage)
+    // 2️⃣ DATA NOTULEN
     // ==========================================================
     const tableBody = document.getElementById("tableBody");
-
     const notulenData = JSON.parse(localStorage.getItem("notulenData")) || [];
 
     function saveNotulenData(data) {
@@ -58,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    if (tableBody) renderNotulenTable(notulenData);
+    renderNotulenTable(notulenData);
 
     // ==========================================================
     // 3️⃣ HAPUS DATA NOTULEN
@@ -67,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const btn = e.target.closest(".btn-delete");
         if (!btn || !tableBody) return;
         const index = btn.dataset.index;
-        if (confirm("Yakin mau hapus data ini?")) {
+        if (index !== undefined && confirm("Yakin mau hapus data ini?")) {
             notulenData.splice(index, 1);
             saveNotulenData(notulenData);
             renderNotulenTable(notulenData);
@@ -75,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // ==========================================================
-    // 4️⃣ PENCARIAN
+    // 4️⃣ PENCARIAN NOTULEN
     // ==========================================================
     const searchInput = document.getElementById("searchInput");
     if (searchInput && tableBody) {
@@ -127,29 +126,30 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ==========================================================
-    // 7️⃣ DATA PENGGUNA (SIMULASI)
+    // 7️⃣ DATA PENGGUNA
     // ==========================================================
-    const users = [
-        { id: 1, name: "Rian", email: "rian@gmail.com", role: "Peserta", photo: "https://randomuser.me/api/portraits/men/44.jpg" },
-        { id: 2, name: "Sinta", email: "sinta@gmail.com", role: "Peserta", photo: "https://randomuser.me/api/portraits/women/45.jpg" },
-        { id: 3, name: "Yudha", email: "yudha@gmail.com", role: "Peserta", photo: "https://randomuser.me/api/portraits/men/56.jpg" },
-    ];
-
     const userTableBody = document.getElementById("userTableBody");
 
-    function renderUserTable(data) {
+    function renderUserTable() {
+        const users = JSON.parse(localStorage.getItem("userData")) || [];
         if (!userTableBody) return;
         userTableBody.innerHTML = "";
-        data.forEach((u, index) => {
+
+        if (users.length === 0) {
+            userTableBody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">Belum ada pengguna.</td></tr>`;
+            return;
+        }
+
+        users.forEach((u, index) => {
             const row = `
                 <tr>
                     <td>${index + 1}</td>
-                    <td><img src="${u.photo}" alt="${u.name}" class="user-photo"></td>
-                    <td>${u.name}</td>
+                    <td><img src="${u.foto || `https://lipsum.app/id/${index + 90}/40x40`}" alt="${u.nama}" class="rounded-circle" width="40"></td>
+                    <td>${u.nama}</td>
                     <td>${u.email}</td>
                     <td><span class="badge-role">${u.role}</span></td>
                     <td>
-                        <button class="btn btn-delete btn-sm" data-id="${u.id}">
+                        <button class="btn btn-delete btn-sm" data-index="${index}">
                             <i class="bi bi-trash"></i>
                         </button>
                     </td>
@@ -159,73 +159,29 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    if (userTableBody) renderUserTable(users);
+    renderUserTable();
 
-    document.addEventListener("click", (e) => {
+    // ==========================================================
+    // 8️⃣ HAPUS PENGGUNA
+    // ==========================================================
+    document.addEventListener("click", function (e) {
         const btn = e.target.closest(".btn-delete");
         if (!btn || !userTableBody) return;
-        const id = parseInt(btn.dataset.id);
-        const index = users.findIndex((u) => u.id === id);
-        if (index !== -1 && confirm("Yakin ingin menghapus pengguna ini?")) {
+        const index = btn.dataset.index;
+        if (index !== undefined && confirm("Yakin ingin menghapus pengguna ini?")) {
+            const users = JSON.parse(localStorage.getItem("userData")) || [];
             users.splice(index, 1);
-            renderUserTable(users);
+            localStorage.setItem("userData", JSON.stringify(users));
+            renderUserTable();
         }
     });
 
-    if (searchInput && userTableBody) {
-        searchInput.addEventListener("input", function () {
-            const keyword = this.value.toLowerCase();
-            const filtered = users.filter(
-                (u) =>
-                    u.name.toLowerCase().includes(keyword) ||
-                    u.email.toLowerCase().includes(keyword) ||
-                    u.role.toLowerCase().includes(keyword)
-            );
-            renderUserTable(filtered);
-        });
-    }
-
     // ==========================================================
-    // 8️⃣ FORM TAMBAH NOTULEN
-    // ==========================================================
-    const notulenForm = document.getElementById("notulenForm");
-    if (notulenForm) {
-        notulenForm.addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            const judul = document.getElementById("judul").value.trim();
-            const tanggal = document.getElementById("tanggal").value.trim();
-            const isi = tinymce.get("isi") ? tinymce.get("isi").getContent() : "";
-            const peserta = Array.from(document.querySelectorAll(".form-check-input:checked")).map(cb => cb.value);
-            const pembuat = adminData?.name || "Admin";
-            const fileInput = document.getElementById("fileInput");
-            let lampiranURL = null;
-            if (fileInput && fileInput.files.length > 0) {
-                lampiranURL = URL.createObjectURL(fileInput.files[0]);
-            }
-
-            const newNotulen = { judul, tanggal, pembuat, isi, peserta, lampiran: lampiranURL };
-
-            notulenData.push(newNotulen);
-            saveNotulenData(notulenData);
-            localStorage.setItem("detailNotulen", JSON.stringify(newNotulen));
-
-            const alertBox = document.getElementById("alertBox");
-            if (alertBox) alertBox.style.display = "block";
-
-            setTimeout(() => {
-                if (alertBox) alertBox.style.display = "none";
-                notulenForm.reset();
-                window.location.href = "dashboard_admin.html";
-            }, 1000);
-        });
-    }
-
-    // ==========================================================
-    // 9️⃣ FORM TAMBAH PENGGUNA
+    // 9️⃣ TAMBAH PENGGUNA
     // ==========================================================
     const addUserForm = document.getElementById("addUserForm");
     const alertBox = document.getElementById("alertBox");
+
     if (addUserForm) {
         addUserForm.addEventListener("submit", (e) => {
             e.preventDefault();
@@ -233,10 +189,18 @@ document.addEventListener("DOMContentLoaded", function () {
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
             const role = document.getElementById("role").value;
+
             if (!nama || !email || !password) return alert("Semua field wajib diisi!");
-            console.log("Pengguna baru:", { nama, email, password, role });
+
+            const newUser = { nama, email, password, role, foto: "" };
+
+            const users = JSON.parse(localStorage.getItem("userData")) || [];
+            users.push(newUser);
+            localStorage.setItem("userData", JSON.stringify(users));
+
             if (alertBox) alertBox.style.display = "block";
             addUserForm.reset();
+            renderUserTable();
             setTimeout(() => (alertBox ? (alertBox.style.display = "none") : null), 2000);
         });
     }
@@ -257,112 +221,90 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ==========================================================
-// 1️⃣1️⃣ EDIT NOTULEN (edit_rapat_admin.html)
-// ==========================================================
-const editForm = document.getElementById("editForm");
-if (editForm) {
-  const detail = JSON.parse(localStorage.getItem("detailNotulen"));
-  const notulenData = JSON.parse(localStorage.getItem("notulenData")) || [];
+    // 1️⃣1️⃣ EDIT NOTULEN (edit_rapat_admin.html)
+    // ==========================================================
+    const editForm = document.getElementById("editForm");
+    if (editForm) {
+        const detail = JSON.parse(localStorage.getItem("detailNotulen"));
+        const notulenData = JSON.parse(localStorage.getItem("notulenData")) || [];
 
-  if (!detail) {
-    alert("Data notulen tidak ditemukan!");
-    window.location.href = "notulen_admin.html";
-    return;
-  }
+        if (!detail) {
+            alert("Data notulen tidak ditemukan!");
+            window.location.href = "notulen_admin.html";
+            return;
+        }
 
-  // === Isi data lama ke form ===
-  document.getElementById("judul").value = detail.judul || "";
-  document.getElementById("tanggal").value = detail.tanggal || "";
+        document.getElementById("judul").value = detail.judul || "";
+        document.getElementById("tanggal").value = detail.tanggal || "";
 
-  // Inisialisasi TinyMCE jika digunakan
-  if (typeof tinymce !== "undefined") {
-    tinymce.init({
-      selector: "#isi",
-      height: 300,
-      setup: (editor) => {
-        editor.on("init", () => {
-          editor.setContent(detail.isi || "");
+        if (typeof tinymce !== "undefined") {
+            tinymce.init({
+                selector: "#isi",
+                height: 300,
+                setup: (editor) => {
+                    editor.on("init", () => {
+                        editor.setContent(detail.isi || "");
+                    });
+                },
+            });
+        } else {
+            document.getElementById("isi").value = detail.isi || "";
+        }
+
+        const pesertaContainer = document.getElementById("pesertaContainer");
+        const semuaPeserta = JSON.parse(localStorage.getItem("pesertaList")) || ["rian","tes","yohana","joko"];
+
+        pesertaContainer.innerHTML = semuaPeserta
+            .map(
+                (nama) => `
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="${nama}" ${detail.peserta?.includes(nama) ? "checked" : ""}>
+                    <label class="form-check-label text-capitalize">${nama}</label>
+                </div>`
+            )
+            .join("");
+
+        const lampiranInfo = document.createElement("small");
+        lampiranInfo.classList.add("text-muted", "d-block", "mt-1");
+        const fileInput = document.getElementById("lampiran");
+        if (detail.lampiran) {
+            lampiranInfo.innerHTML = `Lampiran sebelumnya: <a href="${detail.lampiran}" target="_blank">${detail.lampiran}</a>`;
+        }
+        if (fileInput) fileInput.insertAdjacentElement("afterend", lampiranInfo);
+
+        editForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            if (!confirm("Simpan perubahan notulen ini?")) return;
+
+            const updatedIsi = typeof tinymce !== "undefined" && tinymce.get("isi") ? tinymce.get("isi").getContent() : document.getElementById("isi").value.trim();
+
+            const updated = {
+                ...detail,
+                judul: document.getElementById("judul").value.trim(),
+                tanggal: document.getElementById("tanggal").value.trim(),
+                isi: updatedIsi,
+                peserta: Array.from(document.querySelectorAll("#pesertaContainer input:checked")).map((i) => i.value),
+            };
+
+            if (fileInput && fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                updated.lampiran = URL.createObjectURL(file);
+            }
+
+            const index = notulenData.findIndex(
+                (item) => item.judul === detail.judul && item.tanggal === detail.tanggal
+            );
+            if (index !== -1) {
+                notulenData[index] = updated;
+            }
+
+            localStorage.setItem("notulenData", JSON.stringify(notulenData));
+            localStorage.setItem("detailNotulen", JSON.stringify(updated));
+
+            alert("Perubahan berhasil disimpan!");
+            window.location.href = "notulen_admin.html";
         });
-      },
-    });
-  } else {
-    document.getElementById("isi").value = detail.isi || "";
-  }
-
-  // === Tampilkan daftar peserta ===
-  const pesertaContainer = document.getElementById("pesertaContainer");
-  const semuaPeserta = JSON.parse(localStorage.getItem("pesertaList")) || [
-    "rian",
-    "tes",
-    "yohana",
-    "joko",
-  ];
-
-  pesertaContainer.innerHTML = semuaPeserta
-    .map(
-      (nama) => `
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="${nama}" ${
-        detail.peserta?.includes(nama) ? "checked" : ""
-      }>
-      <label class="form-check-label text-capitalize">${nama}</label>
-    </div>`
-    )
-    .join("");
-
-  // === Tampilkan info lampiran lama ===
-  const lampiranInfo = document.createElement("small");
-  lampiranInfo.classList.add("text-muted", "d-block", "mt-1");
-  if (detail.lampiran) {
-    lampiranInfo.innerHTML = `Lampiran sebelumnya: 
-      <a href="${detail.lampiran}" target="_blank">${detail.lampiran}</a>`;
-  }
-  const fileInput = document.getElementById("lampiran");
-  fileInput.insertAdjacentElement("afterend", lampiranInfo);
-
-  // === Saat disubmit ===
-  editForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    if (!confirm("Simpan perubahan notulen ini?")) return;
-
-    const updatedIsi =
-      typeof tinymce !== "undefined" && tinymce.get("isi")
-        ? tinymce.get("isi").getContent()
-        : document.getElementById("isi").value.trim();
-
-    const updated = {
-      ...detail,
-      judul: document.getElementById("judul").value.trim(),
-      tanggal: document.getElementById("tanggal").value.trim(),
-      isi: updatedIsi,
-      peserta: Array.from(
-        document.querySelectorAll("#pesertaContainer input:checked")
-      ).map((i) => i.value),
-    };
-
-    // Update lampiran jika ada file baru
-    if (fileInput && fileInput.files.length > 0) {
-      const file = fileInput.files[0];
-      updated.lampiran = URL.createObjectURL(file);
     }
-
-    // Update data di array notulenData
-    const index = notulenData.findIndex(
-      (item) => item.judul === detail.judul && item.tanggal === detail.tanggal
-    );
-    if (index !== -1) {
-      notulenData[index] = updated;
-    }
-
-    // Simpan ulang ke localStorage
-    localStorage.setItem("notulenData", JSON.stringify(notulenData));
-    localStorage.setItem("detailNotulen", JSON.stringify(updated));
-
-    alert("Perubahan berhasil disimpan!");
-    window.location.href = "notulen_admin.html";
-  });
-}
-
 
     // ==========================================================
     // 1️⃣2️⃣ INIT TinyMCE
