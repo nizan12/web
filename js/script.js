@@ -1,34 +1,39 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // =============================
-    // Data Notulen (Simulasi)
-    // =============================
+    // ==========================================================
+    // 1️⃣ ADMIN DATA (nama, email, role)
+    // ==========================================================
+    let adminData = JSON.parse(localStorage.getItem("adminData"));
+    if (!adminData) {
+        adminData = {
+            name: "Admin Nizan",
+            email: "nizan@polibatam.ac.id",
+            role: "Admin",
+        };
+        localStorage.setItem("adminData", JSON.stringify(adminData));
+    }
+
+    // Tampilkan nama admin di dashboard
+    const adminNameEl = document.getElementById("adminName");
+    if (adminNameEl) adminNameEl.textContent = `Halo, ${adminData.name} 👋`;
+
+    // ==========================================================
+    // 2️⃣ DATA NOTULEN (localStorage)
+    // ==========================================================
     const tableBody = document.getElementById("tableBody");
 
-    const notulenData = [{
-            judul: "Rapat Akhir Tahun",
-            tanggal: "31/12/2025",
-            pembuat: "Rian"
-        },
-        {
-            judul: "Evaluasi Kinerja",
-            tanggal: "10/10/2025",
-            pembuat: "Didit"
-        },
-        {
-            judul: "Rapat Tim Proyek",
-            tanggal: "05/09/2025",
-            pembuat: "Sinta"
-        },
-        {
-            judul: "Rapat Divisi",
-            tanggal: "20/10/2025",
-            pembuat: "Admin"
-        },
-    ];
+    const notulenData = JSON.parse(localStorage.getItem("notulenData")) || [];
+
+    function saveNotulenData(data) {
+        localStorage.setItem("notulenData", JSON.stringify(data));
+    }
 
     function renderNotulenTable(data) {
         if (!tableBody) return;
         tableBody.innerHTML = "";
+        if (data.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">Data notulen tidak ditemukan.</td></tr>`;
+            return;
+        }
         data.forEach((item, index) => {
             const row = `
                 <tr>
@@ -55,46 +60,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (tableBody) renderNotulenTable(notulenData);
 
+    // ==========================================================
+    // 3️⃣ HAPUS DATA NOTULEN
+    // ==========================================================
     document.addEventListener("click", function (e) {
         const btn = e.target.closest(".btn-delete");
-        if (!btn) return;
+        if (!btn || !tableBody) return;
         const index = btn.dataset.index;
         if (confirm("Yakin mau hapus data ini?")) {
             notulenData.splice(index, 1);
+            saveNotulenData(notulenData);
             renderNotulenTable(notulenData);
         }
     });
 
+    // ==========================================================
+    // 4️⃣ PENCARIAN
+    // ==========================================================
     const searchInput = document.getElementById("searchInput");
     if (searchInput && tableBody) {
         searchInput.addEventListener("input", function () {
             const keyword = this.value.toLowerCase();
             const filtered = notulenData.filter(
                 (item) =>
-                item.judul.toLowerCase().includes(keyword) ||
-                item.pembuat.toLowerCase().includes(keyword) ||
-                item.tanggal.includes(keyword)
+                    item.judul.toLowerCase().includes(keyword) ||
+                    item.pembuat.toLowerCase().includes(keyword) ||
+                    item.tanggal.includes(keyword)
             );
             renderNotulenTable(filtered);
         });
     }
 
-    // =======================
-    // Logout Function
-    // =======================
+    // ==========================================================
+    // 5️⃣ LOGOUT FUNCTION
+    // ==========================================================
     const logoutBtn = document.getElementById("logoutBtn");
     if (logoutBtn) {
         logoutBtn.addEventListener("click", function () {
             if (confirm("Apakah kamu yakin ingin logout?")) {
                 localStorage.removeItem("userData");
+                localStorage.removeItem("adminData");
                 window.location.href = "../login.html";
             }
         });
     }
 
-    // ===========================
-    // Sidebar Toggle
-    // ===========================
+    // ==========================================================
+    // 6️⃣ SIDEBAR TOGGLE
+    // ==========================================================
     const toggleBtn = document.getElementById("toggleSidebar");
     const sidebar = document.querySelector(".sidebar");
     const overlay = document.getElementById("sidebarOverlay");
@@ -109,41 +122,17 @@ document.addEventListener("DOMContentLoaded", function () {
         overlay.addEventListener("click", () => {
             sidebar.classList.remove("active");
             overlay.classList.remove("active");
-            document.body.classList.remove("no-scroll"); 
+            document.body.classList.remove("no-scroll");
         });
     }
 
-    // =============================
-    // Data Pengguna (Simulasi)
-    // =============================
-    const users = [{
-            id: 1,
-            name: "rian",
-            email: "rian@gmail.com",
-            role: "Peserta",
-            photo: "https://randomuser.me/api/portraits/women/44.jpg"
-        },
-        {
-            id: 2,
-            name: "rian12",
-            email: "rian12@gmail.com",
-            role: "Peserta",
-            photo: "https://randomuser.me/api/portraits/women/45.jpg"
-        },
-        {
-            id: 3,
-            name: "tes",
-            email: "tes@gmail.com",
-            role: "Peserta",
-            photo: "https://randomuser.me/api/portraits/men/56.jpg"
-        },
-        {
-            id: 4,
-            name: "yudha",
-            email: "yudha@gmail.com",
-            role: "Peserta",
-            photo: "https://randomuser.me/api/portraits/men/12.jpg"
-        },
+    // ==========================================================
+    // 7️⃣ DATA PENGGUNA (SIMULASI)
+    // ==========================================================
+    const users = [
+        { id: 1, name: "Rian", email: "rian@gmail.com", role: "Peserta", photo: "https://randomuser.me/api/portraits/men/44.jpg" },
+        { id: 2, name: "Sinta", email: "sinta@gmail.com", role: "Peserta", photo: "https://randomuser.me/api/portraits/women/45.jpg" },
+        { id: 3, name: "Yudha", email: "yudha@gmail.com", role: "Peserta", photo: "https://randomuser.me/api/portraits/men/56.jpg" },
     ];
 
     const userTableBody = document.getElementById("userTableBody");
@@ -188,116 +177,208 @@ document.addEventListener("DOMContentLoaded", function () {
             const keyword = this.value.toLowerCase();
             const filtered = users.filter(
                 (u) =>
-                u.name.toLowerCase().includes(keyword) ||
-                u.email.toLowerCase().includes(keyword) ||
-                u.role.toLowerCase().includes(keyword)
+                    u.name.toLowerCase().includes(keyword) ||
+                    u.email.toLowerCase().includes(keyword) ||
+                    u.role.toLowerCase().includes(keyword)
             );
             renderUserTable(filtered);
         });
     }
-});
 
+    // ==========================================================
+    // 8️⃣ FORM TAMBAH NOTULEN
+    // ==========================================================
+    const notulenForm = document.getElementById("notulenForm");
+    if (notulenForm) {
+        notulenForm.addEventListener("submit", function (e) {
+            e.preventDefault();
 
-// =============================
-// Edit Profile
-// =============================
+            const judul = document.getElementById("judul").value.trim();
+            const tanggal = document.getElementById("tanggal").value.trim();
+            const isi = tinymce.get("isi") ? tinymce.get("isi").getContent() : "";
+            const peserta = Array.from(document.querySelectorAll(".form-check-input:checked")).map(cb => cb.value);
+            const pembuat = adminData?.name || "Admin";
+            const fileInput = document.getElementById("fileInput");
+            let lampiranURL = null;
+            if (fileInput && fileInput.files.length > 0) {
+                lampiranURL = URL.createObjectURL(fileInput.files[0]);
+            }
 
-const adminData = JSON.parse(localStorage.getItem("adminData"))
-console.log("Data di localStorage:", adminData);
+            const newNotulen = { judul, tanggal, pembuat, isi, peserta, lampiran: lampiranURL };
 
+            notulenData.push(newNotulen);
+            saveNotulenData(notulenData);
+            localStorage.setItem("detailNotulen", JSON.stringify(newNotulen));
 
-if (adminData) {
-    document.getElementById("profileNama").textContent = adminData.name;
-    document.getElementById("profileEmail").textContent = adminData.email;
-}
-document.getElementById("editprofile").addEventListener("click", function () {
-    window.location.href = "edit_profile_admin.html";
-});
+            const alertBox = document.getElementById("alertBox");
+            if (alertBox) alertBox.style.display = "block";
 
-// =============================
-// Simulasi Penyimpanan Peserta
-// =============================
-const form = document.getElementById("addUserForm");
-const alertBox = document.getElementById("alertBox");
-
-form.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const nama = document.getElementById("nama").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const role = document.getElementById("role").value;
-
-    if (!nama || !email || !password) {
-        alert("Semua field wajib diisi!");
-        return;
+            setTimeout(() => {
+                if (alertBox) alertBox.style.display = "none";
+                notulenForm.reset();
+                window.location.href = "dashboard_admin.html";
+            }, 1000);
+        });
     }
 
-    console.log("Data pengguna baru:", {
-        nama,
-        email,
-        password,
-        role
-    });
-
-    alertBox.style.display = "block";
-    form.reset();
-
-    setTimeout(() => {
-        alertBox.style.display = "none";
-    }, 2000);
-});
-
-
-
-// =============================
-// Simulasi Penyimpanan Form
-// =============================
-document.addEventListener("DOMContentLoaded", function () {
-    const notulenForm = document.getElementById("notulenForm");
-    if (!notulenForm) return;
-
-    notulenForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-
-        const judul = document.getElementById("judul").value;
-        const tanggal = document.getElementById("tanggal").value;
-        const isi = document.getElementById("isi").value;
-
-        const peserta = [];
-        document.querySelectorAll(".form-check-input:checked").forEach((cb) => peserta.push(cb.value));
-
-        console.log("Data Notulen:", {
-            judul,
-            tanggal,
-            isi,
-            peserta
+    // ==========================================================
+    // 9️⃣ FORM TAMBAH PENGGUNA
+    // ==========================================================
+    const addUserForm = document.getElementById("addUserForm");
+    const alertBox = document.getElementById("alertBox");
+    if (addUserForm) {
+        addUserForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const nama = document.getElementById("nama").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const role = document.getElementById("role").value;
+            if (!nama || !email || !password) return alert("Semua field wajib diisi!");
+            console.log("Pengguna baru:", { nama, email, password, role });
+            if (alertBox) alertBox.style.display = "block";
+            addUserForm.reset();
+            setTimeout(() => (alertBox ? (alertBox.style.display = "none") : null), 2000);
         });
+    }
 
-        const alertBox = document.getElementById("alertBox");
-        alertBox.style.display = "block";
+    // ==========================================================
+    // 🔟 EDIT PROFILE ADMIN
+    // ==========================================================
+    const profileNama = document.getElementById("profileNama");
+    const profileEmail = document.getElementById("profileEmail");
+    const editProfileBtn = document.getElementById("editprofile");
 
-        setTimeout(() => {
-            alertBox.style.display = "none";
-            notulenForm.reset();
-        }, 2000);
-    });
-});
+    if (profileNama) profileNama.textContent = adminData.name;
+    if (profileEmail) profileEmail.textContent = adminData.email;
+    if (editProfileBtn) {
+        editProfileBtn.addEventListener("click", function () {
+            window.location.href = "edit_profile_admin.html";
+        });
+    }
 
-// =============================
-// TinyMCE Init
-// =============================
-if (typeof tinymce !== "undefined") {
+    // ==========================================================
+// 1️⃣1️⃣ EDIT NOTULEN (edit_rapat_admin.html)
+// ==========================================================
+const editForm = document.getElementById("editForm");
+if (editForm) {
+  const detail = JSON.parse(localStorage.getItem("detailNotulen"));
+  const notulenData = JSON.parse(localStorage.getItem("notulenData")) || [];
+
+  if (!detail) {
+    alert("Data notulen tidak ditemukan!");
+    window.location.href = "notulen_admin.html";
+    return;
+  }
+
+  // === Isi data lama ke form ===
+  document.getElementById("judul").value = detail.judul || "";
+  document.getElementById("tanggal").value = detail.tanggal || "";
+
+  // Inisialisasi TinyMCE jika digunakan
+  if (typeof tinymce !== "undefined") {
     tinymce.init({
-        selector: "#isi",
-        plugins: [
-            "anchor", "autolink", "charmap", "codesample", "emoticons", "image", "link", "lists", "media",
-            "searchreplace", "table", "visualblocks", "wordcount", "code"
-        ],
-        toolbar: "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | " +
-            "link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | " +
-            "align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat",
-        tinycomments_mode: "embedded",
-        tinycomments_author: "Author name",
+      selector: "#isi",
+      height: 300,
+      setup: (editor) => {
+        editor.on("init", () => {
+          editor.setContent(detail.isi || "");
+        });
+      },
     });
+  } else {
+    document.getElementById("isi").value = detail.isi || "";
+  }
+
+  // === Tampilkan daftar peserta ===
+  const pesertaContainer = document.getElementById("pesertaContainer");
+  const semuaPeserta = JSON.parse(localStorage.getItem("pesertaList")) || [
+    "rian",
+    "tes",
+    "yohana",
+    "joko",
+  ];
+
+  pesertaContainer.innerHTML = semuaPeserta
+    .map(
+      (nama) => `
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="${nama}" ${
+        detail.peserta?.includes(nama) ? "checked" : ""
+      }>
+      <label class="form-check-label text-capitalize">${nama}</label>
+    </div>`
+    )
+    .join("");
+
+  // === Tampilkan info lampiran lama ===
+  const lampiranInfo = document.createElement("small");
+  lampiranInfo.classList.add("text-muted", "d-block", "mt-1");
+  if (detail.lampiran) {
+    lampiranInfo.innerHTML = `Lampiran sebelumnya: 
+      <a href="${detail.lampiran}" target="_blank">${detail.lampiran}</a>`;
+  }
+  const fileInput = document.getElementById("lampiran");
+  fileInput.insertAdjacentElement("afterend", lampiranInfo);
+
+  // === Saat disubmit ===
+  editForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!confirm("Simpan perubahan notulen ini?")) return;
+
+    const updatedIsi =
+      typeof tinymce !== "undefined" && tinymce.get("isi")
+        ? tinymce.get("isi").getContent()
+        : document.getElementById("isi").value.trim();
+
+    const updated = {
+      ...detail,
+      judul: document.getElementById("judul").value.trim(),
+      tanggal: document.getElementById("tanggal").value.trim(),
+      isi: updatedIsi,
+      peserta: Array.from(
+        document.querySelectorAll("#pesertaContainer input:checked")
+      ).map((i) => i.value),
+    };
+
+    // Update lampiran jika ada file baru
+    if (fileInput && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      updated.lampiran = URL.createObjectURL(file);
+    }
+
+    // Update data di array notulenData
+    const index = notulenData.findIndex(
+      (item) => item.judul === detail.judul && item.tanggal === detail.tanggal
+    );
+    if (index !== -1) {
+      notulenData[index] = updated;
+    }
+
+    // Simpan ulang ke localStorage
+    localStorage.setItem("notulenData", JSON.stringify(notulenData));
+    localStorage.setItem("detailNotulen", JSON.stringify(updated));
+
+    alert("Perubahan berhasil disimpan!");
+    window.location.href = "notulen_admin.html";
+  });
 }
+
+
+    // ==========================================================
+    // 1️⃣2️⃣ INIT TinyMCE
+    // ==========================================================
+    if (typeof tinymce !== "undefined") {
+        tinymce.init({
+            selector: "#isi",
+            plugins: [
+                "anchor", "autolink", "charmap", "codesample", "emoticons", "image", "link", "lists", "media",
+                "searchreplace", "table", "visualblocks", "wordcount", "code"
+            ],
+            toolbar:
+                "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | " +
+                "link image media table mergetags | align lineheight | numlist bullist | removeformat",
+            tinycomments_mode: "embedded",
+            tinycomments_author: adminData.name,
+        });
+    }
+});
