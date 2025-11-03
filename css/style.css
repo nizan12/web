@@ -222,6 +222,7 @@ body.no-scroll {
 .sidebar {
     background: #fff;
     min-height: 100vh;
+    justify-content: space-between;
     width: 250px;
     position: fixed;
     top: 0;
