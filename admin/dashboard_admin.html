@@ -13,22 +13,29 @@
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
-  <div class="menu-container">
-    <h5 class="p-3 fw-bold">Menu</h5>
-    <ul class="nav flex-column">
-      <li><a class="nav-link" href="dashboard.html"><i class="bi bi-grid"></i> Dashboard</a></li>
-      <li><a class="nav-link" href="notulen.html"><i class="bi bi-journal-text"></i> Notulen</a></li>
-      <li><a class="nav-link" href="kelola.html"><i class="bi bi-people"></i> Kelola Pengguna</a></li>
-      <li><a class="nav-link" href="tambah.html"><i class="bi bi-person-plus"></i> Tambah Pengguna</a></li>
-      <li><a class="nav-link" href="profile.html"><i class="bi bi-person-circle"></i> Profile</a></li>
-    </ul>
-  </div>
+    <div class="sidebar-menu">
+        <h5 class="fw-bold mb-3">Menu</h5>
 
-  <div class="sidebar-footer">
-    <button id="logoutBtn" class="btn btn-outline-danger w-100">
-      <i class="bi bi-box-arrow-right"></i> Logout
+        <a href="dashboard_admin.html" class="nav-link active">
+            <i class="bi bi-grid"></i> Dashboard
+        </a>
+        <a href="notulen.html" class="nav-link">
+            <i class="bi bi-journal-text"></i> Notulen
+        </a>
+        <a href="kelola.html" class="nav-link">
+            <i class="bi bi-people"></i> Kelola Pengguna
+        </a>
+        <a href="tambah.html" class="nav-link">
+            <i class="bi bi-person-plus"></i> Tambah Pengguna
+        </a>
+        <a href="profile.html" class="nav-link">
+            <i class="bi bi-person-circle"></i> Profile
+        </a>
+    </div>
+
+    <button class="logout-btn" id="logoutBtn">
+        <i class="bi bi-box-arrow-right"></i> Logout
     </button>
-  </div>
 </div>
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
